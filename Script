@@ -1,0 +1,279 @@
+?install.packages("hrbrthemes")
+#loading packages
+library(tidyverse)
+library(lm.beta)
+library(patchwork)
+library(hrbrthemes)
+
+
+#loading dataset
+setwd("~/Rstudio")
+ImportData <- read_csv(file = "min16.csv")
+
+
+#Find missing values
+is.na(ImportData)
+apply(is.na(ImportData), 2, which)
+
+#Delete missing values by importing only complete cases (30 cases excluded)
+data <- ImportData[complete.cases(ImportData[c("Age","Gender","Reasoning_ability","ATR", "Forceps_minor", "Forceps_major", "Frontal_pole", "BA38", "Multiple Demand")]),]
+
+
+#0.1 Exploratory analyses of variables
+data %>%
+  group_by(Gender) %>%
+  count() %>%
+  ungroup()
+
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+  sd_Age = sd(Age),
+  Reasoning_ability = mean(Reasoning_ability),
+  n_values = n())
+
+data %>%
+summarise(mean_Age = mean(Age),
+          sd_Age = sd(Age),
+          Reasoning_ability = mean(Reasoning_ability),
+          n_values = n())
+
+#0.2 Exploratory histogram plots of variables
+ggplot(data, aes(x = Age)) +
+  geom_histogram()
+
+ggplot(data, aes(x = Reasoning_ability)) +
+  geom_histogram()
+
+ggplot(data, aes(x = ATR)) +
+  geom_histogram()
+
+ggplot(data, aes(x = Forceps_minor)) +
+  geom_histogram()
+
+ggplot(data, aes(x = Forceps_major)) +
+  geom_histogram()
+
+ggplot(data, aes(x = Frontal_pole)) +
+  geom_histogram()
+
+ggplot(data, aes(x = BA38)) +
+  geom_histogram()
+
+#1.0 Scatterplots Age
+  #1.1 ATR
+plot1.1 <- ggplot(data, aes(x=Age, y=ATR)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+  #1.2 Forceps minor
+plot1.2 <- ggplot(data, aes(x=Age, y=Forceps_minor)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+  #1.3 Forceps major
+plot1.3 <- ggplot(data, aes(x=Age, y=Forceps_major)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#1.4 Frontal_pole
+plot1.4 <- ggplot(data, aes(x=Age, y=Frontal_pole)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#1.5 Forceps major
+plot1.5 <- ggplot(data, aes(x=Age, y=BA38)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#1.6 MDS
+plot1.6 <- ggplot(data, aes(x=Age, y=`Multiple Demand`)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#1.7 plots
+(plot1.1 + plot1.2 + plot1.3) / (plot1.3 + plot1.4 + plot1.5)
+
+#2 Linear regression analyses Age
+
+  #2.1 ATR
+lm2.1 <- lm(ATR ~ Age, data=data)
+summary(lm2.1)
+
+  #2.2 Forceps_minor
+lm2.2 <- lm(Forceps_minor ~ Age, data=data)
+summary(lm2.2)
+
+  #2.3 Forceps_major
+lm2.3 <- lm(Forceps_major ~ Age, data=data)
+summary(lm2.3)
+
+  #2.4 Frontal pole
+lm2.4 <- lm(Frontal_pole ~ Age, data=data)
+summary(lm2.4)
+
+  #2.5 BA38
+lm2.5 <- lm(BA38 ~ Age, data=data)
+summary(lm2.5)
+
+  #2.6 MDS
+lm2.6 <- lm(`Multiple Demand` ~ Age, data=data)
+summary(lm2.6)
+
+#3.0 Linear regression analyses Reasoning abilites
+#3.1 ATR
+lm3.1 <- lm(ATR ~ Reasoning_ability, data=data)
+summary(lm3.1)
+
+#3.2 Forceps_minor
+lm3.2 <- lm(Forceps_minor ~ Reasoning_ability, data=data)
+summary(lm3.2)
+
+#3.3 Forceps_major
+lm3.3 <- lm(Forceps_major ~ Reasoning_ability, data=data)
+summary(lm3.3)
+
+#3.4 Frontal pole
+lm3.4 <- lm(Frontal_pole ~ Reasoning_ability, data=data)
+summary(lm3.4)
+
+#3.5 BA38
+lm3.5 <- lm(BA38 ~ Reasoning_ability, data=data)
+summary(lm3.5)
+
+#3.6 MDS
+lm3.6 <- lm(`Multiple Demand` ~ Reasoning_ability, data=data)
+summary(lm3.6)
+
+#4.0 Scatterplots Age
+#4.1 ATR
+plot4.1 <- ggplot(data, aes(x=Age, y=ATR)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#4.2 Forceps minor
+plot4.2 <- ggplot(data, aes(x=Age, y=Forceps_minor)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#4.3 Forceps major
+plot4.3 <- ggplot(data, aes(x=Age, y=Forceps_major)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#4.4 Frontal_pole
+plot4.4 <- ggplot(data, aes(x=Age, y=Frontal_pole)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#4.5 Forceps major
+plot4.5 <- ggplot(data, aes(x=Age, y=BA38)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#4.6 MDS
+plot4.6 <- ggplot(data, aes(x=Age, y=`Multiple Demand`)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+#4.7 plots
+(plot1.1 + plot1.2 + plot1.3) / (plot1.3 + plot1.4 + plot1.5)
+  
+#5.0 Check for differences, grouped by gender
+#5.1 Reasoning ability
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            sd_Age = sd(Age),
+            Reasoning_ability = mean(Reasoning_ability),
+            n_values = n())
+
+t.test(Reasoning_ability ~ Gender, data = data, var.equal = TRUE)
+
+#5.2 ATR
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            sd_Age = sd(Age),
+            ATR = mean(ATR),
+            n_values = n())
+
+t.test(ATR ~ Gender, data = data, var.equal = TRUE)
+
+#5.3 Forceps_minor
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            sd_Age = sd(Age),
+            Forceps_minor = mean(Forceps_minor),
+            n_values = n())
+
+t.test(Forceps_minor ~ Gender, data = data, var.equal = TRUE)
+
+#5.4 Forceps_major
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            sd_Age = sd(Age),
+            Forceps_major = mean(Forceps_major),
+            n_values = n())
+
+t.test(Forceps_major ~ Gender, data = data, var.equal = TRUE)
+
+#5.5 Age
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            sd_Age = sd(Age),
+            n_values = n())
+
+#5.6 Frontal pole
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            Frontal_pole = mean(Frontal_pole),
+            n_values = n())
+t.test(Frontal_pole ~ Gender, data = data, var.equal = TRUE)
+
+
+#5.7 BA38
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            BA38 = mean(BA38),
+            n_values = n())
+t.test(BA38 ~ Gender, data = data, var.equal = TRUE)
+
+
+#5.8 Frontal pole
+data %>%
+  group_by(Gender) %>%
+  summarise(mean_Age = mean(Age),
+            `Multiple Demand` = mean(`Multiple Demand`),
+            n_values = n())
+t.test(`Multiple Demand` ~ Gender, data = data, var.equal = TRUE)
+
+#6 Age and reasoning abilities
+plot6 <- ggplot(data, aes(x=Age, y=Reasoning_ability)) +
+  geom_point( color="#69b3a2") +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+
+plot6
+
+lm6 <- lm(Reasoning_ability ~ Age, data=data)
+summary(lm6)
+
+t.test(Reasoning_ability ~ Gender, data = data, var.equal = TRUE)
